@@ -2,13 +2,12 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: l10n_hr_fiskal
+#    Module: l10n_hr_fiskal_lazy
 #    Author: Davor Bojkić
 #    mail:   bole@dajmi5.com
-#    Copyright (C) 2012- Daj Mi 5, Zagreb
+#    Copyright (C) 2012- Daj Mi 5, 
 #                  http://www.dajmi5.com
-#    Contributions: 
-#
+#                    
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
 #    published by the Free Software Foundation, either version 3 of the
@@ -25,45 +24,33 @@
 ##############################################################################
 
 {
-    "name" : "Croatian localization - Fiscalization module",
+    "name" : "Croatian localization - Fiscalization module addon",
     "description" : """
-Croatian localisation.
-======================
+Fiskalizacija izdanih računa
+============================
 
-Author: Davor Bojkić - Bole @ DAJ MI 5
-        www.dajmi5.com
+Author: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
 
-Contributions:
-test    
+               
 
 Description:
-- Prijava objekta na poreznu upravi
-TODO 
-- slanje echo metode
-- zapisi u bazi ( kada je izvršena prijava i eventualno izmjene
-- više prodajnih mjesta? - 
--  
+Dodaje default prostor, naplatni uređaj i dnevnik za usera.
+na računu uzima zadane vrijednosti.
 
-
+ 
 """,
-    "version" : "1.01",
+    "version" : "1.07",
     "author" : "DAJ MI 5",
     "category" : "Localisation/Croatia",
     "website": "http://www.dajmi5.com",
 
     'depends': [
-                'base',
-               'base_vat',
-               'l10n_hr'
+                'l10n_hr_fiskal',
                 ],
-    'init_xml': [],
-    'data': [
-                   #'security/ir.model.access.csv',
-                   #'l10n_hr_base_view.xml',
-                   'l10n_hr_fiskal_view.xml'
+    'update_xml': [
+                   'res_users_view.xml',
+                   #'account_invoice_view.xml',
                    ],
-    "demo" : [],
-    'test' : [],
     "active": False,
     "installable": True,
 }

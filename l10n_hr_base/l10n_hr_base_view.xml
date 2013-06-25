@@ -20,7 +20,7 @@
             <field name="type">form</field>
             <field name="inherit_id" ref="base.view_res_bank_form"/>
             <field name="arch" type="xml">
-            	<field name="bank_bic" position="after">
+            	<field name="email" position="after">
             		<newline/>
 			        <field name="vbb_code"/>
             	</field>

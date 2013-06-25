@@ -41,8 +41,8 @@ class account_invoice(osv.Model):
                 'fiskal_user_id'   : fields.many2one('res.users', 'Fiskalizirao', help='Fiskalizacija. Osoba koja je potvrdila racun'),
                 'zki': fields.char('ZKI', size=64, readonly=True),
                 'jir': fields.char('JIR',size=64 , readonly=True),
-                'uredjaj_id':fields.many2one('fiskal.uredjaj', 'Naplatni uredjaj', help ="Naplatni uređaj na kojem se izdaje racun"),
-                #'prostor_id':fields.many2one('fiskal.prostor', 'Poslovni prostor', help ="Poslovni prostor u kojem se izdaje racun"),
+                'uredjaj_id':fields.many2one('fiskal.uredjaj', 'Naplatni uredjaj', help ="Naplatni uređaj na kojem se izdaje racun",
+                                             readonly=True, states={'draft':[('readonly',False)]}),
                 'fiskal_log_ids':fields.one2many('fiskal.log','invoice_id','Logovi poruka', help="Logovi poslanih poruka prema poreznoj upravi"),
                 'nac_plac':fields.selection((
                                              ('G','GOTOVINA'),
@@ -53,6 +53,7 @@ class account_invoice(osv.Model):
                                              ),
                                             'Nacin placanja', required=True, readonly=True, states={'draft':[('readonly',False)]})   
                }
+    
     _defaults = {
                  'nac_plac':'G' # TODO : postaviti u bazi pitanje kaj da bude default!
                  }
@@ -90,7 +91,6 @@ class account_invoice(osv.Model):
         return True
 
     def button_fiscalize(self, cr, uid, ids, context=None):
-        
         if context is None:
             context = {}
         for invoice in self.browse( cr, uid, ids, context):
@@ -165,7 +165,8 @@ class account_invoice(osv.Model):
         if not invoice.fiskal_user_id:
             self.write(cr, uid, [id], {'fiskal_user_id':uid})
 
-       
+        if not invoice.fiskal_user_id:
+            self.write(cr, uid, [id], {'fiskal_user_id':uid})
             
         invoice= self.browse(cr, uid, [id])[0] #refresh
 

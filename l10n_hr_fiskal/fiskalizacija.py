@@ -236,7 +236,7 @@ class fiskal_uredjaj(osv.Model):
     def name_get(self, cr, uid, ids, context=None):
         res = {}
         for u in self.browse(cr, uid, ids, context=context):
-            res[u.id] = ' / '.join( (u.prostor_id.name, u.name) )
+            res[u.id] = '/'.join( (u.prostor_id.name, u.name) )
         return res.items()
     
     _columns = {

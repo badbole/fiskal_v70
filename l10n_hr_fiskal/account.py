@@ -23,7 +23,6 @@ class account_journal(osv.osv):
     _defaults = {'fiskal_active': False, 
                 }
 
-
 class account_tax_code(osv.Model):
     _inherit = 'account.tax.code'
     def _get_fiskal_type(self,cursor,user_id, context=None):
@@ -47,7 +46,7 @@ class account_move(osv.osv):
     def post(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
-        res = super(account_move,self).post(cr, uid, ids, context)
+        res = super(account_move,self).post(cr, uid, ids, context=context)
         if res:
             invoice = context.get('invoice', False)
             if not invoice:

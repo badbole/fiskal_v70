@@ -2,13 +2,12 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Module: l10n_hr_base
-#    Author: Goran Kliska
-#    mail:   goran.kliska(AT)slobodni-programi.hr
-#    Copyright: Slobodni programi d.o.o., Zagreb
-#                  http://www.slobodni-programi.hr
-#    Contributions:
-#
+#    Module: l10n_hr_fiskal_lazy
+#    Author: Davor Bojkić
+#    mail:   bole@dajmi5.com
+#    Copyright (C) 2012- Daj Mi 5, 
+#                  http://www.dajmi5.com
+#                    
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
 #    published by the Free Software Foundation, either version 3 of the
@@ -24,11 +23,11 @@
 #
 ##############################################################################
 
-from osv import fields, osv
+from osv import osv, fields
 
-class Bank(osv.Model):
-    _inherit = 'res.bank'
-    _columns = {
-        'vbb_code': fields.char('VBB', size=24),
-    }
-Bank()
+class account_invoice(osv.Model):
+    _inherit = "account.invoice"
+    
+    def _get_journal(self, cr, uid, ids, context=None):
+        res = self.pool.get('res.users').read(cr, uid, uid)['journal_id']
+        return res and res[0] or False

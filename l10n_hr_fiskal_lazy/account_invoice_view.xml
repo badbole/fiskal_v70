@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+		<record id="account_invoice_form_fiskal_lazy" model="ir.ui.view" >
+			<field name="name">account_invoice_form_fiskal_lazy</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="l10n_hr_fiskal.account_invoice_form_fiskal"/>
+			<field name="arch" type="xml">
+				<field name="nac_plac" position="after">
+				    <button string ="TEST" name="test_get_user_defaults" type="object"/> 
+				</field>
+			</field>
+		</record>
+	</data>
+</openerp>
