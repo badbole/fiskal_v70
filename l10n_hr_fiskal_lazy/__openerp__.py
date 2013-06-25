@@ -35,7 +35,7 @@ Author: Davor Bojkić - Bole @ DAJ MI 5     www.dajmi5.com
 
 Description:
 Dodaje default prostor, naplatni uređaj i dnevnik za usera.
-na računu uzima zadane vrijednosti.
+TODO : na računu uzima zadane vrijednosti.
 
  
 """,
