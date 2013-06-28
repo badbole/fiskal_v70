@@ -134,7 +134,7 @@ class account_invoice(osv.osv):
                     self.write(cr, uid, [id], {'fiskal_user_id':uid}, context=context)
                 if not obj_inv.vrijeme_izdavanja:
 
-                    self.write(cr, uid, [id], {'vrijeme_izdavanja': time.strftime(DEFAULT_SERVER_DATE_FORMAT )}, context=context)
+                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetimetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT )}, context=context)
                 ref = self.pnbr_get(cr, uid, id, context)
                 self.write(cr, uid, id, {'reference':ref})
                 #KGB - end
