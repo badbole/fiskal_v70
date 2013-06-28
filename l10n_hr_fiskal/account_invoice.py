@@ -151,6 +151,15 @@ class account_invoice(osv.Model):
             #TODO group and sum by fiskal_type and Stopa hmmm then send 1 by one into factory... 
             get_factory(val)            
         return res
+    
+    def invoice_valid(self, cr, uid, invoice, context=None):
+        if not invoice.journal_id.fiskal_active:
+            raise osv.except_osv(_('Error'), _('Za ovaj dokument fiskalizacija nije aktivna!!'))
+        if not invoice.fiskal_user_id.oib:
+            raise osv.except_osv(_('Error'), _('Neispravan OIB korisnika!'))
+        if not invoice.uredjaj_id.id:
+            raise osv.except_osv(_('Error'), _('Nije odabran naplatni uredjaj / Dokument !'))
+        return True
 
     def fiskaliziraj(self, cr, uid, id, context=None):
         """ Fiskalizira jedan izlazni racun
@@ -164,16 +173,18 @@ class account_invoice(osv.Model):
         #tko pokusava fiskalizirati?
         if not invoice.fiskal_user_id:
             self.write(cr, uid, [id], {'fiskal_user_id':uid})
-
-        if not invoice.fiskal_user_id:
-            self.write(cr, uid, [id], {'fiskal_user_id':uid})
             
         invoice= self.browse(cr, uid, [id])[0] #refresh
 
         #TODO - posebna funkcija za provjeru npr. invoice_fiskal_valid()
+        
+        self.invoice_valid(cr, uid, invoice)
+        """
         if not invoice.fiskal_user_id.oib:
             raise osv.except_osv(_('Error'), _('Neispravan OIB korisnika!'))
-        
+        if not invoice.uredjaj_id.id:
+            raise osv.except_osv(_('Error'), _('Nije odabran naplatni uredjaj / Dokument !'))
+        """
         wsdl, key, cert = prostor_obj.get_fiskal_data(cr, uid, company_id=invoice.company_id.id)
         if not wsdl:
             return False

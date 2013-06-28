@@ -34,7 +34,7 @@ class res_users(osv.osv):
                 'journal_id':fields.many2one('account.journal','Dokument', help="Zadani dnevnik"),
                 'double_check':fields.boolean('Dvostruka provjera na računima'),
                 }
-    
+    """
     def onchange_journal_id(self, cr, uid, ids, journal_id=False, context=None):
         result = super(res_users,self).onchange_journal_id(cr, uid, ids, journal_id=journal_id, context=context)
         if journal_id:
@@ -49,3 +49,4 @@ class res_users(osv.osv):
             result['domain'].update({'uredjaj_id':[('prostor_id','=',prostor_id )]})
         
         return result
+    """

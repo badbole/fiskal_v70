@@ -40,14 +40,14 @@ Description:
  For Storno Journals refund invoices are (usually) done in the same journal with negative *(-1) quantities.
 
  Countries where Storno accounting is mandatory or considered as best practice:
-     Czech Republic, Poland, Romania, Russia, Slovakia, Ukraine, Croatia, Bosnia and Herzegovina, Serbia, Romania, ...
+     Czech Republic, Poland, Romania, Russia, China, Slovakia, Slovenia, Ukraine, Croatia, Bosnia and Herzegovina, Serbia, Romania, ...
 
 WARNING:
  This module is managing accounting, invoices, and refund wizard. 
  Other modules are required for stock, voucher, etc. storno posting.
 
 """,
-    "version" : "11.1",
+    "version" : "13.1",
     "author" : "Slobodni programi d.o.o.",
     "category" : "Localisation/Croatia",
     "website": "http://www.slobodni-programi.hr",

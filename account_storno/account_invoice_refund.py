@@ -28,13 +28,26 @@ from tools.translate import _
 import netsvc
 
 class account_invoice(osv.osv):
+    """Not knowing legal requirements of all storno countries about journals
+       This version is for Croatia, Bih, Serbia...
+       Candidate for new module?  
+    """
     _inherit = "account.invoice"
+
+    def _journal_invoice_type_dict(self):
+        return {'sale': 'out_invoice', # Customer Invoice
+                'purchase': 'in_invoice', # Customer Refund
+                'sale_refund': 'out_refund',   # Supplier Invoice
+                'purchase_refund': 'in_refund',   # Supplier Refund
+                }
 
     def refund(self, cr, uid, ids, date=None, period_id=None, description=None, journal_id=None):
         #Where is the context, per invoice method?
         #This approach is slow, updating after creating, but maybe better than copy-paste whole method
         res = super(account_invoice, self).refund(cr, uid, ids, date=date, period_id=period_id, description=description, journal_id=journal_id)
         for invoice in self.pool.get('account.invoice').browse(cr, uid, res):
+            self.pool.get('account.invoice').write(cr, uid, [invoice.id],
+                  {'type': self._journal_invoice_type_dict()[invoice.journal_id.type] })
             if invoice.journal_id.posting_policy == 'storno':
                 for inv_line in invoice.invoice_line:
                     self.pool.get('account.invoice.line').write(cr, uid, 
@@ -85,7 +98,7 @@ class account_invoice_refund(osv.osv_memory):
         if invoice_type in ('out_invoice', 'out_refund'):
             journal_types = ('sale','sale_refund')
         elif invoice_type in ('in_invoice', 'in_refund'):
-            journal_types = ()
+            journal_types = ('purchase','purchase_refund')
         else:
             journal_types = ('sale','sale_refund','purchase','purchase_refund') 
         journal_select = journal_obj._name_search(cr, uid, '', [('type', 'in', journal_types), ('company_id','child_of',[company_id])], context=context)
@@ -93,4 +106,20 @@ class account_invoice_refund(osv.osv_memory):
         res['fields']['journal_id']['selection'] = journal_select
         return res
 
-account_invoice_refund()
+    def compute_refund(self, cr, uid, ids, mode='refund', context=None):
+        mod_obj = self.pool.get('ir.model.data')
+        act_obj = self.pool.get('ir.actions.act_window')
+        res = super(account_invoice_refund,self).compute_refund(cr, uid, ids, mode=mode, context=context)
+        last_inv_id = res['domain'][1][2][-1]  #yupiii here is last created invoice id, great hook
+        inv = self.pool.get('account.invoice').browse(cr, uid, [last_inv_id])[0]
+        xml_id = (inv.type == 'out_refund') and 'action_invoice_tree3' or \
+                 (inv.type == 'in_refund') and 'action_invoice_tree4' or \
+                 (inv.type == 'out_invoice') and 'action_invoice_tree1' or \
+                 (inv.type == 'in_invoice') and 'action_invoice_tree2'
+        result = mod_obj.get_object_reference(cr, uid, 'account', xml_id)
+        id = result and result[1] or False
+        result = act_obj.read(cr, uid, id, context=context)
+        invoice_domain = eval(result['domain'])
+        invoice_domain.append(('id', 'in', res['domain'][1][2] ))
+        result['domain'] = invoice_domain
+        return result

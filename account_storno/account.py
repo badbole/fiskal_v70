@@ -67,7 +67,7 @@ class account_move_line(osv.osv):
         """
         for l in self.browse(cr, uid, ids, context=context):
             if l.journal_id.posting_policy == 'contra':
-                if not (l.debit * l.credit) >= 0.0:
+                if l.debit + l.credit < 0.0:
                     return False
         return True
 
@@ -94,28 +94,3 @@ class account_model_line(osv.osv):
         ('credit_debit1', 'CHECK (credit*debit=0)',  'Wrong credit or debit value in model! Either credit or debit must be 0.00.'),
         ('credit_debit2', 'CHECK (abs(credit+debit)>=0)', 'Wrong credit or debit value in accounting entry !'),
     ]
-
-
-#Trigger example for paranoid 
-#For Storno accounting Tax/Base amount always == debit + credit   
-"""
-        cr.execute('''
-                CREATE OR REPLACE FUNCTION debit_credit2tax_amount() RETURNS trigger AS
-                $debit_credit2tax_amount$
-                BEGIN
-                   NEW.tax_amount := CASE when NEW.tax_code_id is not null
-                                           then coalesce(NEW.credit, 0.00)+coalesce(NEW.debit, 0.00)
-                                           else 0.00
-                                      END;
-                   RETURN NEW;
-                END;
-                $debit_credit2tax_amount$ LANGUAGE plpgsql;
-
-                ALTER FUNCTION debit_credit2tax_amount() OWNER TO %s;
-
-                DROP TRIGGER IF EXISTS move_line_tax_amount ON account_move_line;
-                CREATE TRIGGER move_line_tax_amount BEFORE INSERT OR UPDATE ON account_move_line
-                    FOR EACH ROW EXECUTE PROCEDURE debit_credit2tax_amount();
-        '''%(tools.config['db_user'],))
-
-"""
