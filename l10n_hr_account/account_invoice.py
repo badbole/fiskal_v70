@@ -133,9 +133,8 @@ class account_invoice(osv.osv):
                 if not obj_inv.fiskal_user_id:#mandatory on all invoices in croatia
                     self.write(cr, uid, [id], {'fiskal_user_id':uid}, context=context)
                 if not obj_inv.vrijeme_izdavanja:
-                    tstamp = datetime.now(timezone('Europe/Zagreb'))
-                    v_datum_racun='%02d.%02d.%02d %02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)
-                    self.write(cr, uid, [id], {'vrijeme_izdavanja': v_datum_racun}, context=context)
+
+                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetimetime.strftime(DEFAULT_SERVER_DATETIME_FORMAT )}, context=context)
                 ref = self.pnbr_get(cr, uid, id, context)
                 self.write(cr, uid, id, {'reference':ref})
                 #KGB - end
