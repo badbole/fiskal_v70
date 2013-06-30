@@ -27,7 +27,8 @@ from osv import osv, fields
 
 class account_invoice(osv.Model):
     _inherit = "account.invoice"
-    
+    """
     def _get_journal(self, cr, uid, ids, context=None):
         res = self.pool.get('res.users').read(cr, uid, uid)['journal_id']
         return res and res[0] or False
+    """

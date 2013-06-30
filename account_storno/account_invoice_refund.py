@@ -101,12 +101,17 @@ class account_invoice_refund(osv.osv_memory):
             journal_types = ('purchase','purchase_refund')
         else:
             journal_types = ('sale','sale_refund','purchase','purchase_refund') 
-        journal_select = journal_obj._name_search(cr, uid, '', [('type', 'in', journal_types), ('company_id','child_of',[company_id])], context=context)
+        #journal_select = journal_obj._name_search(cr, uid, '', [('type', 'in', journal_types), ('company_id','child_of',[company_id])], context=context)
         #original for loop needed??? 
-        res['fields']['journal_id']['selection'] = journal_select
+        #res['fields']['journal_id']['selection'] = journal_select
+        for field in res['fields']:
+            if field == 'journal_id':
+                journal_select = journal_obj._name_search(cr, uid, '', [('type', '=', journal_types), ('company_id','child_of',[company_id])], context=context)
+                res['fields'][field]['selection'] = journal_select
         return res
 
     def compute_refund(self, cr, uid, ids, mode='refund', context=None):
+        if context==None:context={}
         mod_obj = self.pool.get('ir.model.data')
         act_obj = self.pool.get('ir.actions.act_window')
         res = super(account_invoice_refund,self).compute_refund(cr, uid, ids, mode=mode, context=context)
