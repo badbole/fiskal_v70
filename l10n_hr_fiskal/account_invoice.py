@@ -38,6 +38,7 @@ class account_invoice(osv.Model):
     _inherit = "account.invoice"
     _columns = {
                 'vrijeme_izdavanja': fields.datetime("Vrijeme", readonly=True),
+                'vrijeme_txt':fields.char('txtdt', size=64, readonly="1"), #ugly hack da proradi narzaka... bum vidil kak s tim posle.. 
                 'fiskal_user_id'   : fields.many2one('res.users', 'Fiskalizirao', help='Fiskalizacija. Osoba koja je potvrdila racun'),
                 'zki': fields.char('ZKI', size=64, readonly=True),
                 'jir': fields.char('JIR',size=64 , readonly=True),
@@ -76,6 +77,7 @@ class account_invoice(osv.Model):
         default = default or {}
         default.update({
             'vrijeme_izdavanja':False,
+            'vrijeme_txt':False,
             'fiskal_user_id':False,
             'zki':False,
             'jir': False,
@@ -175,10 +177,7 @@ class account_invoice(osv.Model):
             self.write(cr, uid, [id], {'fiskal_user_id':uid})
             
         invoice= self.browse(cr, uid, [id])[0] #refresh
-
-        #TODO - posebna funkcija za provjeru npr. invoice_fiskal_valid()
-        
-        self.invoice_valid(cr, uid, invoice)
+        self.invoice_valid(cr, uid, invoice) # provjeri sve podatke
         
         wsdl, key, cert = prostor_obj.get_fiskal_data(cr, uid, company_id=invoice.company_id.id)
         if not wsdl:
@@ -190,10 +189,11 @@ class account_invoice(osv.Model):
         a.zaglavlje.DatumVrijeme = start_time['datum_vrijeme'] #TODO UTC -> Europe/Zagreb 
         a.zaglavlje.IdPoruke = str(uuid.uuid4())
         
-        dat_vrijeme = invoice.vrijeme_izdavanja
+        dat_vrijeme = invoice.vrijeme_txt # --> _izdavanja
         if not dat_vrijeme:
             dat_vrijeme = start_time['datum_vrijeme']
-            self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime('%d.%m.%Y. %H:%M:%S')}) #start_time['time_stamp'].strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT) })
+            self.write(cr, uid, [id], {'vrijeme_izdavanja': start_time['time_stamp'].strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT),
+                                       'vrijeme_txt':start_time['datum_racun'] }) #boletov ugly hck
         
         if not invoice.company_id.fina_certifikat_id:
             raise osv.except_osv(_('No certificate!'), _('No valid certificate found for fiscalization usage, Please provide one.'))

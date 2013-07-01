@@ -129,14 +129,15 @@ class account_invoice(osv.osv):
                     #TODO: need to? self.action_date_assign( cr, uid, [id])
                 if not obj_inv.date_delivery: #mandatory in Croatia for services
                     self.write(cr, uid, [id], {'date_delivery':obj_inv.date_invoice}, context=context)
+                
+                
                 ##BOLE dodao : fiskal_user and fiskal date needed for reports in croatia.
                 if not obj_inv.fiskal_user_id:#mandatory on all invoices in croatia
                     self.write(cr, uid, [id], {'fiskal_user_id':uid}, context=context)
                 if not obj_inv.vrijeme_izdavanja:
-                    #tstamp = datetime.now(timezone('Europe/Zagreb'))
-                    #v_datum_racun='%02d.%02d.%02d %02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)
                     #self.write(cr, uid, [id], {'vrijeme_izdavanja': v_datum_racun}, context=context)
-                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT )})
+                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT ),
+                                               'vrijeme_txt':datetime.now().strftime('%d.%m.%Y. %H:%M:%S')})  # ugly hck
                 ref = self.pnbr_get(cr, uid, id, context)
                 self.write(cr, uid, id, {'reference':ref})
                 #KGB - end

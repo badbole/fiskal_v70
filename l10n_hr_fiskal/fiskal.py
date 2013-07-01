@@ -176,6 +176,7 @@ class Fiskalizacija():
 
     def time_formated(self): 
         tstamp = zagreb_now() 
+        #tstamp=datetime.now()
         v_date='%02d.%02d.%02d' % (tstamp.day, tstamp.month, tstamp.year)
         v_datum_vrijeme='%02d.%02d.%02dT%02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)
         v_datum_racun='%02d.%02d.%02d %02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)

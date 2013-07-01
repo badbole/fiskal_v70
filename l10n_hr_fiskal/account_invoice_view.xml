@@ -15,7 +15,10 @@
 						<button name="button_fiscalize" states="open,paid" string="Fiskaliziraj" type="object" groups="base.group_user" />
 						<newline/>
 				        <field name="fiskal_user_id" readonly="True"/>
-				      	<field name="vrijeme_izdavanja" readonly="True"/> 
+				      	<!-- 
+				      	<field name="vrijeme_izdavanja" readonly="True"/>
+				      	 --> 
+				      	<field name="vrijeme_txt" readonly="True" string="Vrijeme izdavanja" />
 						</group>
 						<field name="fiskal_log_ids" nolabel="1" readonly="True" colspan="4"/>
 	                </page>	
