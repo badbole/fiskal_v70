@@ -198,7 +198,7 @@ class account_invoice(osv.Model):
         dat_vrijeme = invoice.vrijeme_izdavanja
         if not dat_vrijeme:
             dat_vrijeme = start_time['datum_vrijeme']
-            self.write(cr, uid, [id], {'vrijeme_izdavanja': start_time['time_stamp'].strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT) })
+            self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime('%d.%m.%Y. %H:%M:%S')}) #start_time['time_stamp'].strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT) })
         
         if not invoice.company_id.fina_certifikat_id:
             raise osv.except_osv(_('No certificate!'), _('No valid certificate found for fiscalization usage, Please provide one.'))
