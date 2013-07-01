@@ -136,7 +136,7 @@ class account_invoice(osv.osv):
                     #tstamp = datetime.now(timezone('Europe/Zagreb'))
                     #v_datum_racun='%02d.%02d.%02d %02d:%02d:%02d' % (tstamp.day, tstamp.month, tstamp.year, tstamp.hour, tstamp.minute, tstamp.second)
                     #self.write(cr, uid, [id], {'vrijeme_izdavanja': v_datum_racun}, context=context)
-                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now(timezone('Europe/Zagreb')).strftime(DEFAULT_SERVER_DATETIME_FORMAT )}, context=context)
+                    self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT )}, context=context)
                 ref = self.pnbr_get(cr, uid, id, context)
                 self.write(cr, uid, id, {'reference':ref})
                 #KGB - end
