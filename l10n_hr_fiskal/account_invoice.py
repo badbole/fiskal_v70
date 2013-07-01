@@ -179,12 +179,7 @@ class account_invoice(osv.Model):
         #TODO - posebna funkcija za provjeru npr. invoice_fiskal_valid()
         
         self.invoice_valid(cr, uid, invoice)
-        """
-        if not invoice.fiskal_user_id.oib:
-            raise osv.except_osv(_('Error'), _('Neispravan OIB korisnika!'))
-        if not invoice.uredjaj_id.id:
-            raise osv.except_osv(_('Error'), _('Nije odabran naplatni uredjaj / Dokument !'))
-        """
+        
         wsdl, key, cert = prostor_obj.get_fiskal_data(cr, uid, company_id=invoice.company_id.id)
         if not wsdl:
             return False
