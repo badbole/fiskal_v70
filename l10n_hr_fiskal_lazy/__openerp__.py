@@ -49,7 +49,7 @@ na računu uzima zadane vrijednosti.
                 ],
     'update_xml': [
                    'res_users_view.xml',
-                   #'account_invoice_view.xml',
+                   'account_invoice_view.xml',
                    ],
     "active": False,
     "installable": True,

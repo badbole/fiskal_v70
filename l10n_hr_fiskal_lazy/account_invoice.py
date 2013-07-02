@@ -27,8 +27,18 @@ from osv import osv, fields
 
 class account_invoice(osv.Model):
     _inherit = "account.invoice"
-    """
-    def _get_journal(self, cr, uid, ids, context=None):
-        res = self.pool.get('res.users').read(cr, uid, uid)['journal_id']
-        return res and res[0] or False
-    """
+   
+    
+    def _get_fiskal_broj(self, cr, uid, ids, field_name, field_value, context=None):
+        res={}
+        for invoice in self.browse(cr, uid, ids):
+            rn={}
+            # PAZI!! ovo samo ako je prefix %(y)/  dakle 3 znaka!!!
+            test = invoice.number and invoice.number[3:] or False
+            test = test and test.lstrip('0')
+            res[invoice.id]=test #{'fiskal_broj':test}
+        return res
+        
+    _columns = {
+                'fiskal_broj':fields.function(_get_fiskal_broj, type="char", string="Fiskalizirani broj", readonly=True , store=True)
+                }

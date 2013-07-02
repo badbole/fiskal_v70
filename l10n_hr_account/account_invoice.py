@@ -137,7 +137,7 @@ class account_invoice(osv.osv):
                 if not obj_inv.vrijeme_izdavanja:
                     #self.write(cr, uid, [id], {'vrijeme_izdavanja': v_datum_racun}, context=context)
                     self.write(cr, uid, [id], {'vrijeme_izdavanja': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT ),
-                                               'vrijeme_txt':datetime.now().strftime('%d.%m.%Y. %H:%M:%S')})  # ugly hck
+                                               'vrijeme_txt':datetime.now(timezone('Europe/Zagreb')).strftime('%d.%m.%Y. %H:%M:%S')})  # ugly hck
                 ref = self.pnbr_get(cr, uid, id, context)
                 self.write(cr, uid, id, {'reference':ref})
                 #KGB - end

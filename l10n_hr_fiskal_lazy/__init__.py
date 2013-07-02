@@ -24,4 +24,4 @@
 ##############################################################################
 
 import res_users
-#import account_invoice
+import account_invoice
