@@ -29,16 +29,36 @@ class account_invoice(osv.Model):
     _inherit = "account.invoice"
    
     
+    
     def _get_fiskal_broj(self, cr, uid, ids, field_name, field_value, context=None):
         res={}
         for invoice in self.browse(cr, uid, ids):
-            rn={}
-            # PAZI!! ovo samo ako je prefix %(y)/  dakle 3 znaka!!!
-            test = invoice.number and invoice.number[3:] or False
-            test = test and test.lstrip('0')
-            res[invoice.id]=test #{'fiskal_broj':test}
+            """
+                PAZI!! [3:] samo ako je sequence prefiks  %(y)/
+                Ukoliko se koristi ova opcija onda ju se nesmije uninstalirati naknadno!  
+            """
+            
+            res[invoice.id]=(invoice.type in ('out_invoice','out_refund')) and invoice.number and invoice.number[3:].lstrip('0') or False 
         return res
         
     _columns = {
                 'fiskal_broj':fields.function(_get_fiskal_broj, type="char", string="Fiskalizirani broj", readonly=True , store=True)
                 }
+    
+    def invoice_validate(self, cr, uid, ids, context=None):
+        assert len(ids)==1,'Jedna po jedna molim lijepo'
+        inv_check=self.browse(cr, uid, ids[0])
+        #1. provjera po dnevniku/uredjeju
+        if inv_check.uredjaj_id.prostor_id.id != inv_check.journal_id.prostor_id.id:
+            raise osv.except_osv('NIJE MOGUĆE!', 'Ne slažu se podaci o poslovnom prostoru i dokument prodaje')
+        #2. provjera po journal/uredjaj
+        user = self.pool.get('res.users').browse(cr, uid, uid)
+        if user.uredjaji and inv_check.uredjaj_id not in user.uredjaji:
+            raise osv.except_osv('NIJE MOGUĆE POTVRDITI!', 'Odabrani naplatni Prostor/Blagajana nisu Vam odobreni za korištenje!')
+        if user.journals and inv_check.journal_id not in user.journals:
+            raise osv.except_osv('NIJE MOGUĆE POTVRDITI!', 'Nemate prava pisanja u odabrani Dokument!')
+        
+        
+        
+        self.write(cr, uid, ids, {'state':'open'}, context=context)
+        return True

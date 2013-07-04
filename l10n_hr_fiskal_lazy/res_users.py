@@ -32,21 +32,21 @@ class res_users(osv.osv):
                 'prostor_id':fields.many2one('fiskal.prostor','Podružnica', help="Zadana podružnica"),
                 'uredjaj_id':fields.many2one('fiskal.uredjaj','Naplatni uredjaj',help="Zadani naplatni uređaj"),
                 'journal_id':fields.many2one('account.journal','Dokument', help="Zadani dnevnik"),
+                'journals':fields.many2many('account.journal','account_journal_user_rel','journals','users','Dozvoljeni dnevnici knjženja'),
+                'uredjaji':fields.many2many('fiskal.uredjaj','fiskal_uredjaj_user_rel','uredjaji','users','Dozvoljeni naplatni uredjaji'),
                 'double_check':fields.boolean('Dvostruka provjera na računima'),
                 }
-    """
-    def onchange_journal_id(self, cr, uid, ids, journal_id=False, context=None):
-        result = super(res_users,self).onchange_journal_id(cr, uid, ids, journal_id=journal_id, context=context)
-        if journal_id:
-            journal = self.pool.get('account.journal').browse(cr, uid, journal_id, context=context)
-            prostor_id = journal.prostor_id and journal.prostor_id.id or False
-            nac_plac = journal.nac_plac or False
-            uredjaj_id = journal.fiskal_uredjaj_ids and journal.fiskal_uredjaj_ids[0].id or False
-            result['value'].update({'nac_plac' : nac_plac,
-                                    'uredjaj_id' : uredjaj_id,
-                                   })
-            result['domain']= result.get('domain',{})
-            result['domain'].update({'uredjaj_id':[('prostor_id','=',prostor_id )]})
-        
-        return result
-    """
+    
+class fiskal_uredjaj(osv.Model):
+    _inherit = 'fiskal.uredjaj'
+    _columns = {
+                'users':fields.many2many('res.users','fiskal_uredjaj_user_rel','users','uredjaji','Odobreno za korisnike')
+                }
+    
+class account_journal(osv.Model):
+    _inherit = 'account.journal'
+    
+    _columns = {
+                'users':fields.many2many('res.users','account_journal_user_rel','users','journals','Users allowed')
+                }
+    
