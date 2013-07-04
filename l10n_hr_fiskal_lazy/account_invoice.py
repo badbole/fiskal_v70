@@ -50,13 +50,13 @@ class account_invoice(osv.Model):
         inv_check=self.browse(cr, uid, ids[0])
         #1. provjera po dnevniku/uredjeju
         if inv_check.uredjaj_id.prostor_id.id != inv_check.journal_id.prostor_id.id:
-            raise osv.except_osv('NIJE MOGUĆE!', 'Ne slažu se podaci o poslovnom prostoru i dokument prodaje')
+            raise osv.except_osv('NIJE MOGUcE!', 'Ne slazu se podaci o poslovnom prostoru i dokument prodaje')
         #2. provjera po journal/uredjaj
         user = self.pool.get('res.users').browse(cr, uid, uid)
         if user.uredjaji and inv_check.uredjaj_id not in user.uredjaji:
-            raise osv.except_osv('NIJE MOGUĆE POTVRDITI!', 'Odabrani naplatni Prostor/Blagajana nisu Vam odobreni za korištenje!')
+            raise osv.except_osv('NIJE MOGUcE POTVRDITI!', 'Odabrani naplatni Prostor/Blagajana nisu Vam odobreni za koristenje!')
         if user.journals and inv_check.journal_id not in user.journals:
-            raise osv.except_osv('NIJE MOGUĆE POTVRDITI!', 'Nemate prava pisanja u odabrani Dokument!')
+            raise osv.except_osv('NIJE MOGUCE POTVRDITI!', 'Nemate prava pisanja u odabrani Dokument!')
         
         
         
