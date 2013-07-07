@@ -37,6 +37,7 @@ Description:
 Dodaje default prostor, naplatni uređaj i dnevnik za usera.
 na računu uzima zadane vrijednosti.
 
+PAZI - fiskalizirani broj je podešen na 3 znamenke ( 13/ ) !!!
  
 """,
     "version" : "1.07",

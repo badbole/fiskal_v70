@@ -48,17 +48,20 @@ class account_invoice(osv.Model):
     def invoice_validate(self, cr, uid, ids, context=None):
         assert len(ids)==1,'Jedna po jedna molim lijepo'
         inv_check=self.browse(cr, uid, ids[0])
-        #1. provjera po dnevniku/uredjeju
-        if inv_check.uredjaj_id.prostor_id.id != inv_check.journal_id.prostor_id.id:
-            raise osv.except_osv('NIJE MOGUcE!', 'Ne slazu se podaci o poslovnom prostoru i dokument prodaje')
-        #2. provjera po journal/uredjaj
-        user = self.pool.get('res.users').browse(cr, uid, uid)
-        if user.uredjaji and inv_check.uredjaj_id not in user.uredjaji:
-            raise osv.except_osv('NIJE MOGUcE POTVRDITI!', 'Odabrani naplatni Prostor/Blagajana nisu Vam odobreni za koristenje!')
-        if user.journals and inv_check.journal_id not in user.journals:
-            raise osv.except_osv('NIJE MOGUCE POTVRDITI!', 'Nemate prava pisanja u odabrani Dokument!')
-        
-        
-        
+        if inv_check.type in ('out_invoice','out_refund'):
+            if  not inv_check.uredjaj_id:
+                raise osv.except_osv('NIJE MOGUCE!', 'Nije unesen naplatni uredjaj')
+            #1. provjera po dnevniku/uredjeju
+            if inv_check.uredjaj_id.prostor_id.id != inv_check.journal_id.prostor_id.id:
+                raise osv.except_osv('NIJE MOGUCE!', 'Ne slazu se podaci o poslovnom prostoru i dokument prodaje')
+            #2. provjera po journal/uredjaj
+            user = self.pool.get('res.users').browse(cr, uid, uid)
+            if user.uredjaji and inv_check.uredjaj_id not in user.uredjaji:
+                raise osv.except_osv('NIJE MOGUCE POTVRDITI!', 'Odabrani naplatni Prostor/Blagajana nisu Vam odobreni za koristenje!')
+            if user.journals and inv_check.journal_id not in user.journals:
+                raise osv.except_osv('NIJE MOGUCE POTVRDITI!', 'Nemate prava pisanja u odabrani Dokument!')
+            
+            
+            
         self.write(cr, uid, ids, {'state':'open'}, context=context)
         return True
