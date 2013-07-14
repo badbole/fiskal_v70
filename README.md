@@ -8,3 +8,8 @@ dajmi5 set of modules for openerp v7
 - l10n_hr_vat
 - l10n_hr_fiskal
 
+Tested only on ubuntu server platform, 
+instalation requires additional python modules installed.
+
+
+
