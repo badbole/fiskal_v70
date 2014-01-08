@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
-
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
+	<data>
     	<record id="l10n_hr_acc_reports_form_view" model="ir.ui.view">
     		<field name="name">HRV reports</field>
     		<field name="model">l10n.hr.report.wiz</field>
@@ -17,7 +16,6 @@
     			</form>
     		</field>
     	</record>
-    	
     	<record id="l10n_hr_acc_reports_wizard" model="ir.actions.act_window">
     		<field name="name">Izvještaji za računovodstvo</field>
     		<field name="type">ir.actions.act_window</field>
@@ -26,11 +24,9 @@
     		<field name="view_mode">form</field>
     		<field name="target">new</field>
     	</record>
-    	
     	<menuitem id="l10n_hr_report_wiz_menu"
     			  action="l10n_hr_acc_reports_wizard"
     			  name="Ispis izvještaja"
     			  parent="account.menu_finance_reporting"/>
-    			  
-   </data>
+    </data>
 </openerp>

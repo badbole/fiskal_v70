@@ -45,7 +45,7 @@ Description:
                 'l10n_hr_fiskal'
                 ],
     'update_xml': [
-                   'wizard/report_view.xml'
+                   #'wizard/hr_report_view.xml'
                    ],
     "active": False,
     "installable": True,
