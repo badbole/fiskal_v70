@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    	<record id="account_invoice_form_2nd_curr" model="ir.ui.view" >
+			<field name="name">account_invoice_form_2nd_curr</field>
+			<field name="model">account.invoice</field>
+			<field name="inherit_id" ref="account.invoice_form"/>
+			<field name="arch" type="xml">
+				<field name="residual" position="after">
+    				<field name="second_curr" invisible="1"/>
+    				<field name="second_rate" attrs="{'invisible':[('second_curr','=',False)]}"/>
+    				<field name="second_value" attrs="{'invisible':[('second_curr','=',False)]}" />
+    				<button string="Reverse Calc" type="object" name="button_reverse" attrs="{'invisible':[('second_curr','=',False)]}" />
+					   				
+    			</field>
+  		</field>
+    	</record>
+ 		
+    	<record id="invoice_reverse_calc_wizard" model="ir.ui.view">
+    		<field name="name">invoice_reverse_calc_wizard</field>
+    		<field name="model">invoice.reverse.calc</field>
+    		<field name="arch" type="xml">
+    			<form string="Target price">
+    				<field name="invoice_id" invisible="1"/>
+					<label string="Backward calculation from given Target price in second currency\nDiscounts will be zeroed"/>    				
+					<field name="target_amount" nolabel="1"/>
+	   				<button string = "Cancel" special="cancel" class="oe_inline"/>
+					 <button string="Calculate" type="object" name="reverse_calc" class="oe_inline oe_highlight"/>
+	   					 				
+    			</form>
+    		</field>
+    	</record>
+    </data>
+</openerp>
