@@ -10,7 +10,8 @@
     				<field name="second_curr" invisible="1"/>
     				<field name="second_rate" attrs="{'invisible':[('second_curr','=',False)]}"/>
     				<field name="second_value" attrs="{'invisible':[('second_curr','=',False)]}" />
-    				<button string="Reverse Calc" type="object" name="button_reverse" attrs="{'invisible':[('second_curr','=',False)]}" />
+    				<button string="Reverse Calc" type="object" name="button_reverse" 
+    				attrs="{'invisible':[('second_curr','=',False),('state','!=','draft')]}" />
 					   				
     			</field>
   		</field>

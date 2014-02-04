@@ -26,7 +26,7 @@
 from osv import osv, fields
 from decimal_precision import decimal_precision as dp
 from datetime import date
-from numpy.lib.financial import rate
+
 
 class account_invoice(osv.Model):
     _inherit = 'account.invoice'
