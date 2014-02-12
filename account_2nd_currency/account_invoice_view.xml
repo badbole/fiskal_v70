@@ -8,10 +8,10 @@
 			<field name="arch" type="xml">
 				<field name="residual" position="after">
     				<field name="second_curr" invisible="1"/>
-    				<field name="second_rate" attrs="{'invisible':[('second_curr','=',False)]}"/>
-    				<field name="second_value" attrs="{'invisible':[('second_curr','=',False)]}" />
+    				<field name="second_rate" attrs="{'invisible':['|',('second_curr','=',False),('currency_id','!=',30)]}"/>
+    				<field name="second_value" attrs="{'invisible':['|',('second_curr','=',False),('currency_id','!=',30)]}" />
     				<button string="Reverse Calc" type="object" name="button_reverse" groups="base.group_user" 
-    				attrs="{'invisible':['|',('second_curr','=',False),('state','!=','draft')]}" />
+    				attrs="{'invisible':['|','|',('second_curr','=',False),('state','!=','draft'),('currency_id','!=',30)]}" />
 					   				
     			</field>
   		</field>
