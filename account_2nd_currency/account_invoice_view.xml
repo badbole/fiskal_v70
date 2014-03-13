@@ -7,12 +7,13 @@
 			<field name="inherit_id" ref="account.invoice_form"/>
 			<field name="arch" type="xml">
 				<field name="residual" position="after">
-    				<field name="second_curr" invisible="1"/>
+    				
     				<field name="second_rate" attrs="{'invisible':['|',('second_curr','=',False),('currency_id','!=',30)]}"/>
     				<field name="second_value" attrs="{'invisible':['|',('second_curr','=',False),('currency_id','!=',30)]}" />
+    				<field name="second_curr" />
     				<button string="Reverse Calc" type="object" name="button_reverse" groups="base.group_user" 
     				attrs="{'invisible':['|','|',('second_curr','=',False),('state','!=','draft'),('currency_id','!=',30)]}" />
-					   				
+					   		
     			</field>
   		</field>
     	</record>

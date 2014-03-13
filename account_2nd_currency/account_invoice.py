@@ -40,7 +40,7 @@ class account_invoice(osv.Model):
         res={}
         cc=self.my_company(cr, uid).partner_id.country_id.id
         for p in self.browse(cr, uid, ids):
-            res[p.id]= p.partner_id.country_id.id and p.partner_id.country_id.id !=cc or False
+            res[p.id]= p.partner_id.country_id.id and p.partner_id.country_id.id or False
         return res
     
     def _second_currency_value(self, cr, uid, ids, name, val, context=None):
@@ -54,11 +54,12 @@ class account_invoice(osv.Model):
         return res
     
     _columns = {
-                'second_curr':fields.function(_foreign_partner_check, type="boolean", string="Foreign partner", method=True, ),
+                #'second_curr':fields.boolean(_foreign_partner_check, type="boolean", string="Foreign partner", method=True, store=True),
+                'second_curr':fields.boolean('EUR'),
                 'second_value':fields.function(_second_currency_value, type="float", string="Iznos u EUR", method=True, multi="2nd"),
                 'second_rate':fields.function(_second_currency_value, type="float", digits=(12,6), string="Tečaj", method=True, multi="2nd"),
-                #'second_rdate':fields.function(_second_currency_value, type="date", string="Rate date", method=True, multi="2nd"),
                 }
+    
     def button_reverse(self, cr, uid, ids, context=None):
         reverse = self.pool.get('invoice.reverse.calc').create(cr, uid,{'invoice_id':ids[0]})
         view_ref = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account_2nd_currency', 'invoice_reverse_calc_wizard')
